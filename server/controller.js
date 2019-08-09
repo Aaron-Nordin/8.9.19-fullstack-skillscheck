@@ -8,8 +8,8 @@ module.exports = {
     // if (user.length > 0) {
     //   return res.status(400).send({ message: "Username in use." });
     // }
-    const newUser = await db.add_user({ username, password }); // newUser: [{}]
-    res.status(201).send(newUser);
+    const user = await db.add_user({ username, password }); // user: [{}]
+    res.status(201).send(user);
   },
 
   login: async (req, res) => {
