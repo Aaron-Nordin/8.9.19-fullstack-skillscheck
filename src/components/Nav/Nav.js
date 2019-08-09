@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 class Nav extends Component {
   render() {
-      console.log(this.props)
     return (
         <div>
             <h1>{this.props.username}</h1>

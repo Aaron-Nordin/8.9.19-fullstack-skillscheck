@@ -18,9 +18,9 @@ class Auth extends Component {
   registerUser = () => {
     const { username, password } = this.state;
     axios
-      .post("/auth/register", { username, password })
+      .post("/api/auth/register", { username, password })
       .then(res => {
-        const { id, username, profile_pic } = res.data[0];
+        const { id, username, profile_pic } = res.data;
         setUser({ id, username, profile_pic });
       })
       .then(this.props.history.push("/dashboard"));
@@ -29,10 +29,9 @@ class Auth extends Component {
   login = () => {
     const { username, password } = this.state;
     axios
-      .post("/login", { username, password })
+      .post("/api/auth/login", { username, password })
       .then(res => {
-          console.log(res.data[0])
-        const { id, username, profile_pic } = res.data[0];
+        const { id, username, profile_pic } = res.data;
         setUser({ id, username, profile_pic });
       })
       .then(this.props.history.push("/dashboard"));
@@ -55,9 +54,9 @@ class Auth extends Component {
             placeholder="password"
             onChange={e => this.handleChange(e)}
           />
+        </form>
           <button onClick={this.login}>Login</button>
           <button onClick={this.registerUser}>Register</button>
-        </form>
       </div>
     );
   }
