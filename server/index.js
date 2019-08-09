@@ -20,3 +20,6 @@ massive(CONNECTION_STRING)
   });
 
   //---------------------ENDPOINTS----------------------------
+
+  app.post("/auth/register", controller.register)
+  app.post("/login", controller.login)

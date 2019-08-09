@@ -1,0 +1,1 @@
+select * from users2 where username = ${username} and password = ${password};
