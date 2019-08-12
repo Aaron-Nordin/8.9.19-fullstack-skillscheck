@@ -5,6 +5,7 @@ class Nav extends Component {
   render() {
     return (
         <div>
+            {/* <h1>{JSON.stringify(this.props)}</h1> */}
             <h1>{this.props.username}</h1>
             <img src={this.props.profile_pic} alt="user pic"/>
         </div>

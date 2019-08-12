@@ -57,9 +57,12 @@ class Dashboard extends Component {
         {this.state.posts.map(p => (
           <div key={p.id}>
             <Link to={`/api/posts/${p.id}`}>
-              {p.title}
-              {p.username}
-              {p.profile_pic}
+              <div className="post-info">
+                <hr />
+                <h2>{p.title}</h2>
+                <h5>{p.username}</h5>
+                <img src={p.profile_pic} alt="profile pic" />
+              </div>
             </Link>
           </div>
         ))}
