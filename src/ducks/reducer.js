@@ -11,7 +11,6 @@ const LOGOUT_USER = "LOGOUT_USER";
 
 //ACTION BUILDERS
 export function setUser(user) {
-  console.log(user)
   return {
     type: SET_USER,
     payload: user
@@ -29,7 +28,6 @@ export default function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case SET_USER:
-      console.log(payload);
       const { id, username, profile_pic } = payload;
       return { ...state, id, username, profile_pic };
     case LOGOUT_USER:

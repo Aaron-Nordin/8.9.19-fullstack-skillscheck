@@ -11,9 +11,8 @@ export default class Post extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
     axios.get(`/api/posts/${this.props.match.postid}`).then(res => {
-      console.log(res);
+      console.log(res.data);
       const { title, img, content, username, profile_pic } = res.data;
       this.setState({ title, img, content, username, profile_pic });
     });

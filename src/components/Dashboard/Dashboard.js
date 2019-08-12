@@ -9,7 +9,7 @@ class Dashboard extends Component {
     super();
     this.state = {
       search: "",
-      checkbox: true,
+      userpost: true,
       posts: []
     };
     this.handleClick = this.handleClick.bind(this);
@@ -39,11 +39,15 @@ class Dashboard extends Component {
   };
 
   getPosts = () => {
-    axios.get("/api/posts").then(res => {
-      this.setState({
-        posts: res.data
+    axios
+      .get(
+        `/api/posts?userpost=${this.state.userpost}&search=${this.state.search}`
+      )
+      .then(res => {
+        this.setState({
+          posts: res.data
+        });
       });
-    });
   };
 
   render() {
