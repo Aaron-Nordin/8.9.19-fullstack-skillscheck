@@ -9,6 +9,7 @@ class Dashboard extends Component {
     super();
     this.state = {
       search: "",
+      inputValue: "",
       userpost: true,
       posts: []
     };
@@ -38,17 +39,24 @@ class Dashboard extends Component {
     });
   };
 
+  search = () => {
+    this.getPosts();
+  };
+
+  reset = () => {
+    this.setState({ search: "" });
+    this.getPosts()
+  };
+
   getPosts = () => {
     const { search, userpost } = this.state;
-    const { id } = this.props;
-    console.log("search:", search, "userpost:", userpost)
-    parseInt(id, 10);
+    // const { id } = this.props;
+    // console.log("search:", search, "userpost:", userpost);
+    // parseInt(id, 10);
     axios
-      .get(
-        `/api/posts?userposts=${userpost}&search=${search}&id=${id}`
-      )
+      .get(`/api/posts?userposts=${userpost}&search=${search}`)
+      // &id=${id}
       .then(res => {
-        console.log("hit", res.data);
         this.setState({
           posts: res.data
         });
@@ -58,14 +66,21 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        Dashboard
-        <input type="text" onChange={e => this.handleChange(e)} />
-        <button>Search</button>
-        <button>Reset</button>
+        <input
+          name="search"
+          type="text"
+          onChange={e => this.handleChange(e)}
+          value={this.state.search}
+        />
+        <button onClick={this.search}>Search</button>
+        <button onClick={this.reset}>Reset</button>
+        <Link to="/new">
+          <button>New Post</button>
+        </Link>
         <input type="checkbox" checked onChange={() => this.handleClick()} />
         {this.state.posts.map(p => (
           <div key={p.id}>
-            <Link to={`/api/posts/${p.id}`}>
+            <Link to={`/post/${p.id}`}>
               <div className="post-info">
                 <hr />
                 <h2>{p.title}</h2>

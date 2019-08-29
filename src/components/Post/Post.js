@@ -6,15 +6,14 @@ export default class Post extends Component {
     title: "",
     img: "",
     content: "",
-    username: "",
-    profile_pic: ""
+    username: ""
   };
 
   componentDidMount() {
-    axios.get(`/api/posts/${this.props.match.postid}`).then(res => {
-      console.log(res.data);
-      const { title, img, content, username, profile_pic } = res.data;
-      this.setState({ title, img, content, username, profile_pic });
+    axios.get(`/api/posts/${this.props.match.params.postid}`).then(res => {
+      // console.log(res.data);
+      const { title, img, content, username } = res.data[0];
+      this.setState({ title, img, content, username });
     });
   }
 
@@ -22,7 +21,7 @@ export default class Post extends Component {
     return (
       <div>
         Post
-        <img src={this.state.profile_pic} alt="profile pic" />
+        <img src={this.state.img} alt="profile pic" />
         <h1>{this.state.username}</h1>
         <hr />
         <h3>{this.state.title}</h3>
