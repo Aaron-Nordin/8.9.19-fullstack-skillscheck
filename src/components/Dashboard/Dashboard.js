@@ -39,11 +39,16 @@ class Dashboard extends Component {
   };
 
   getPosts = () => {
+    const { search, userpost } = this.state;
+    const { id } = this.props;
+    console.log("search:", search, "userpost:", userpost)
+    parseInt(id, 10);
     axios
       .get(
-        `/api/posts?userpost=${this.state.userpost}&search=${this.state.search}`
+        `/api/posts?userposts=${userpost}&search=${search}&id=${id}`
       )
       .then(res => {
+        console.log("hit", res.data);
         this.setState({
           posts: res.data
         });

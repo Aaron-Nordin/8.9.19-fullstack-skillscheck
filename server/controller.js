@@ -33,17 +33,51 @@ module.exports = {
     res.status(200).send({ message: "Logged out" });
   },
 
-  getPosts: async (req, res) => {
-    const db = req.app.get("db");
-    // const posts = await db.get_posts();
-    let posts = [];
-    if (req.query.userpost === "true") {
-      posts = await db.get_user_posts([req.session.userid]);
-    } else if (req.query.userpost === "false") {
-      posts = await db.get_posts();
-    } else posts = await db.get_posts();
-    res.status(200).send(posts);
-  },
+  // getPosts: async (req, res) => {
+  //   const db = req.app.get("db");
+  //   // const posts = await db.get_posts();
+  //   let posts = [];
+  //   if (req.query.userpost === "true") {
+  //     posts = await db.get_user_posts([req.session.userid]);
+  //   } else if (req.query.userpost === "false") {
+  //     posts = await db.get_posts();
+  //   } else posts = await db.get_posts();
+  //   res.status(200).send(posts);
+  // },
+
+  getPosts: async (req,res) => {
+    const db = req.app.get('db')
+    const userPost = req.query.userposts === 'true' ? true: false ;
+    const search = req.query.search ? req.query.search :'';
+    let userId = req.query.id
+    userId = +userId
+    // console.log({userPost, search, userId})
+    if(userPost && search !== ''){
+        // console.log('1')
+        const posts = await db.search_by_title(['%' + search + '%'])
+        res.status(200).send(posts)
+    }
+    else if(!userPost && search === ''){
+        // console.log('2')
+        const posts = await db.search_title_not_user([userId])
+        res.status(200).send(posts)
+    }
+    else if(!userPost && search){
+        // console.log('3')
+        const posts = await db.search_notuser_posts([userId, '%' + search + '%'])
+        res.status(200).send(posts)
+    }
+    else if(userPost && !search){
+        // console.log('4')
+        const posts = await db.get_all_posts()
+        res.status(200).send(posts)
+    }
+    else if(!userPost && !search){
+        // console.log('5')
+        const posts = await db.get_all_posts()
+        res.status(200).send(posts)
+    }
+},
 
   getPost: async (req, res) => {
     const db = req.app.get("db");
