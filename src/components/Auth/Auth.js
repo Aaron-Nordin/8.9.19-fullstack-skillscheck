@@ -6,8 +6,15 @@ import { setUser } from "../../ducks/reducer";
 class Auth extends Component {
   state = {
     username: "",
-    password: ""
+    password: "",
+
   };
+
+  async componentDidMount() {
+    let res = await axios.get("/api/auth/me")
+    this.props.setUser(res.data)
+  }
+  
 
   handleChange(e) {
     this.setState({

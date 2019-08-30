@@ -15,10 +15,10 @@ module.exports = {
     if (user.length === 0) {
       return res.status(400).send({ message: "Login info incorrect" });
     }
-    console.log(user)
+    // console.log(user)
     req.session.user = user[0];
     // req.session.userid = user[0].id;
-    console.log("loginsession", req.session);
+    // console.log("loginsession", req.session);
     res.status(200).send({ user: req.session.user });
   },
 
@@ -31,8 +31,8 @@ module.exports = {
     const db = req.app.get("db");
     const userPost = req.query.userposts === "true" ? true : false;
     const search = req.query.search ? req.query.search : "";
-    // let userId = req.query.id
-    let userId = req.session.userid;
+    let userId = req.query.id
+    // let userId = req.session.userid;
     userId = +userId;
     // console.log({userPost, search, userId})
     if (userPost && search !== "") {
@@ -70,13 +70,24 @@ module.exports = {
     res.status(200).send(post);
   },
 
-  getMe: async (req, res) => {
-    console.log("reqsession", req.session);
+  createPost: async (req, res) => {
+    // console.log("req.session", req.session)
     const db = req.app.get("db");
-    const { user } = req.session;
-    console.log("user", user);
-    const userResult = await db.get_user_by_id([user.id]);
-    console.log(userResult);
-    res.status(200).send(userResult[0]);
+    const { id, title, img, content } = req.body;
+    // let author_id = req.session.userid;
+    const newPost = await db.add_post({ author_id: id, title, img, content });
+    res.sendStatus(200);
+  },
+
+  getMe: async (req, res) => {
+    // console.log("reqsession", req.session);
+    // const db = req.app.get("db");
+    // const { user } = req.session;
+    // console.log("user", user);
+    // const userResult = await db.get_user_by_id([user.id]);
+    // console.log(userResult);
+    // res.status(200).send(userResult[0]);
+    console.log(req.session.user)
+    res.status(200).send(req.session.user)
   }
 };

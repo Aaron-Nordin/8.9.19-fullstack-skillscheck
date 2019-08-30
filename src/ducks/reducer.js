@@ -1,6 +1,6 @@
 //INITIAL STATE
 const initialState = {
-  // id: null,
+  id: null,
   username: "",
   profile_pic: ""
 };
@@ -28,8 +28,8 @@ export default function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case SET_USER:
-      const { username, profile_pic } = payload;
-      return { ...state, username, profile_pic };
+      const { id, username, profile_pic } = payload;
+      return { ...state, id, username, profile_pic };
     case LOGOUT_USER:
       return initialState;
     default:

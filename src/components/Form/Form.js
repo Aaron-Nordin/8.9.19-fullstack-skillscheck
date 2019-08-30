@@ -1,12 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import axios from "axios";
+import { setUser } from "../../ducks/reducer";
 
 class Form extends Component {
-  state = {
-    title: "",
-    img: "",
-    content: ""
-  };
+  constructor() {
+    super();
+    this.state = {
+      title: "",
+      img: "",
+      content: ""
+    };
+  }
+
+  async componentDidMount() {
+    let res = await axios.get("/api/auth/me");
+    this.props.setUser(res.data);
+  }
 
   handleChange(e) {
     this.setState({
@@ -14,15 +24,38 @@ class Form extends Component {
     });
   }
 
+  handleSubmit = () => {
+    const { title, img, content } = this.state;
+    const { id } = this.props;
+    axios
+      .post("/api/posts/new", { id, title, img, content })
+      .then(this.props.history.push("/dashboard"));
+  };
+
   render() {
     return (
       <div>
         Form
         <form onSubmit={e => e.preventDefault()}>
-          <input name="title" type="text" placeholder="Enter Title" />
-          <input name="img" type="text" placeholder="Enter Image URL" />
-          <input name="content" type="text" placeholder="Enter Post Content" />
-          <input type="submit" value="Submit" />
+          <input
+            name="title"
+            type="text"
+            placeholder="Enter Title"
+            onChange={e => this.handleChange(e)}
+          />
+          <input
+            name="img"
+            type="text"
+            placeholder="Enter Image URL"
+            onChange={e => this.handleChange(e)}
+          />
+          <input
+            name="content"
+            type="text"
+            placeholder="Enter Post Content"
+            onChange={e => this.handleChange(e)}
+          />
+          <button onClick={this.handleSubmit}>Post</button>
         </form>
       </div>
     );
@@ -34,4 +67,7 @@ function mapStateToProps(state) {
   return { id };
 }
 
-export default connect(mapStateToProps)(Form);
+export default connect(
+  mapStateToProps,
+  { setUser }
+)(Form);

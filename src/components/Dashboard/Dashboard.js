@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { logoutUser } from "../../ducks/reducer";
+import { logoutUser, setUser } from "../../ducks/reducer";
 
 class Dashboard extends Component {
   constructor() {
@@ -16,8 +16,10 @@ class Dashboard extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.getPosts();
+    let res = await axios.get("/api/auth/me");
+    this.props.setUser(res.data);
   }
 
   handleChange(e) {
@@ -28,7 +30,7 @@ class Dashboard extends Component {
 
   handleClick() {
     this.setState({
-      checkbox: true ? false : true
+      userpost: true ? false : true
     });
   }
 
@@ -44,17 +46,17 @@ class Dashboard extends Component {
   };
 
   reset = () => {
-    this.setState({ search: "" });
-    this.getPosts()
+    this.setState({ search: "", userpost: true });
+    this.getPosts();
   };
 
   getPosts = () => {
     const { search, userpost } = this.state;
-    // const { id } = this.props;
+    const { id } = this.props;
     // console.log("search:", search, "userpost:", userpost);
-    // parseInt(id, 10);
+    parseInt(id, 10);
     axios
-      .get(`/api/posts?userposts=${userpost}&search=${search}`)
+      .get(`/api/posts?userposts=${userpost}&search=${search}&id=${id}`)
       // &id=${id}
       .then(res => {
         this.setState({
@@ -77,7 +79,11 @@ class Dashboard extends Component {
         <Link to="/new">
           <button>New Post</button>
         </Link>
-        <input type="checkbox" checked onChange={() => this.handleClick()} />
+        <input
+          type="checkbox"
+          defaultChecked={true}
+          onChange={() => this.handleClick()}
+        />
         {this.state.posts.map(p => (
           <div key={p.id}>
             <Link to={`/post/${p.id}`}>
@@ -103,5 +109,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser, setUser }
 )(Dashboard);
